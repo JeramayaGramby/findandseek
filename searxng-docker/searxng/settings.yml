@@ -1,0 +1,27 @@
+# see https://docs.searxng.org/admin/engines/settings.html#use-default-settings
+use_default_settings: true
+server:
+  # base_url is defined in the SEARXNG_BASE_URL environment variable, see .env and docker-compose.yml
+  secret_key: "1eca39eb6990154f0cff06202b97e6bff05184c00e2c273fb99828ea4834e49b"  # change this!
+  limiter: true  # can be disabled for a private instance
+  image_proxy: true
+  method: "GET"
+ui:
+  static_use_hash: true
+redis:
+  url: redis://redis:6379/0
+general:
+  debug: false
+  instance_name:  "I Can Find It Online"
+  privacypolicy_url: false
+  donation_url: /info/en/donate
+  contact_url: https://www.robertattfield.com
+  enable_metrics: true
+brand:
+  source_code: https://github.com/rattfieldnz/searxng-docker
+  issue_url: https://github.com/rattfieldnz/searxng-docker/issues
+  docs_url: https://docs.searxng.org
+  public_instances: https://searx.space
+  wiki_url: https://github.com/rattfieldnz/searxng-docker/wiki
+search:
+  autocomplete: "duckduckgo"
