@@ -2,7 +2,7 @@
 use_default_settings: true
 server:
   # base_url is defined in the SEARXNG_BASE_URL environment variable, see .env and docker-compose.yml
-  secret_key: "1eca39eb6990154f0cff06202b97e6bff05184c00e2c273fb99828ea4834e49b"  # change this!
+  secret_key: "34ff898251fe862a7fc611a343616231fda04d2f86a5101535ce62ff2387b2a7" 
   limiter: true  # can be disabled for a private instance
   image_proxy: true
   method: "GET"
@@ -12,16 +12,16 @@ redis:
   url: redis://redis:6379/0
 general:
   debug: false
-  instance_name:  "I Can Find It Online"
+  instance_name:  "FindAndSeek"
   privacypolicy_url: false
   donation_url: /info/en/donate
-  contact_url: https://www.robertattfield.com
+  contact_url: https://www.linkedin.com/in/jeramaya-gramby/
   enable_metrics: true
 brand:
-  source_code: https://github.com/rattfieldnz/searxng-docker
-  issue_url: https://github.com/rattfieldnz/searxng-docker/issues
+  source_code: https://github.com/JeramayaGramby/findandseek/tree/main/searxng-docker
+  issue_url: https://github.com/JeramayaGramby/findandseek/tree/main/searxng-docker/issues
   docs_url: https://docs.searxng.org
   public_instances: https://searx.space
-  wiki_url: https://github.com/rattfieldnz/searxng-docker/wiki
+  wiki_url: https://github.com/JeramayaGramby/findandseek/tree/main/searxng-docker/wiki
 search:
   autocomplete: "duckduckgo"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# A script to run SearXNG on reboot via a cron job.
+# This script runs SearXNG on reboot via a cron job.
 
 # Check if Docker daemon is running.
 if [[ $(sudo systemctl is-active docker) != active ]]; then
