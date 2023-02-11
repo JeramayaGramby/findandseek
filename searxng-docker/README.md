@@ -1,88 +1,35 @@
-# searxng-docker
+<br>
 
-Create a new SearXNG  instance in five minutes using Docker
+## This README file contains:
+-Search Engine Link  <br>
+-Overview of the project <br>
+-Project Infrastructure <br>
+-Weaknesses and plans for V2<br>
+-Project photos<br><br>
 
-## What is included ?
+## Link for my search engine!
+https://findandseek.click <br><br>
 
-| Name | Description | Docker image | Dockerfile |
-| -- | -- | -- | -- |
-| [Caddy](https://github.com/caddyserver/caddy) | Reverse proxy (create a LetsEncrypt certificate automatically) | [caddy/caddy:2-alpine](https://hub.docker.com/_/caddy) | [Dockerfile](https://github.com/caddyserver/caddy-docker) |
-| [SearXNG](https://github.com/searxng/searxng) | SearXNG by itself | [searxng/searxng:latest](https://hub.docker.com/r/searxng/searxng) | [Dockerfile](https://github.com/searxng/searxng/blob/master/Dockerfile) |
-| [Redis](https://github.com/redis/redis) | In-memory database | [redis:alpine](https://hub.docker.com/_/redis) | [Dockerfile-alpine.template](https://github.com/docker-library/redis/blob/master/Dockerfile-alpine.template) |
+## Project Overview
+In a society where consumer data is being tracked and utilized at a high rate search engines prioritizing individual privacy are in high demand. FindAndSeek is a solution aimed to solve this dilemma. It is a metasearch engine that finds results across different search providers without tracking the consumer's web interactions. The only demographic information that FindAndSeek records is its total amount of visitors.<br><br>
 
-## How to use it
-- [Install docker](https://docs.docker.com/install/)
-- [Install docker-compose](https://docs.docker.com/compose/install/) (be sure that docker-compose version is at least 1.9.0)
-- Get searxng-docker
-  ```sh
-  cd /usr/local
-  git clone https://github.com/searxng/searxng-docker.git
-  cd searxng-docker
-  ```
-- Edit the [.env](https://github.com/rattfieldnz/searxng-docker/blob/master/.env) file to set the hostname and an email
-- Generate the secret key ```sed -i "s|ultrasecretkey|$(openssl rand -hex 32)|g" searxng/settings.yml```
-- Edit the [searxng/settings.yml](https://github.com/rattfieldnz/searxng-docker/blob/master/searxng/settings.yml) file according to your need
-- Check everything is working: ```docker-compose up```
-- Run SearXNG in the background: ```docker-compose up -d```
+## Project Infrastructure
+This project was originally configured with a Ubuntu 20.04 machine image on a "t2.micro" EC2 instance. 
 
-## How to access the logs
-To access the logs from all the containers use: `docker-compose logs -f`.
+Separate Docker containers for Redis, Caddy and the main web app, named "Searxng", are hosted and run on a "t3.small" EC2 instance. The "t3.small" instance was upgraded from "t2.micro" to comply with vCPU requirements for using Kubernetes. To ensure high availability for the web application the Searxng container is run inside of a Kubernetes pod with 3 pod replicas working inside the Kubernetes cluster.  
 
-To access the logs of one specific container:
-- Caddy: `docker-compose logs -f caddy`
-- SearXNG: `docker-compose logs -f searxng`
-- Redis: `docker-compose logs -f redis`
+There are simpler methods that ensure high availability, such as seamlessly using the same AMI to create a configuration template for an Auto-Scaling Group or editing the Kubernetes deployment template file to provision more than 3 pod replicas. But these solutions require more cloud resources and subsequently more money. Cost was the primary driving factor when creating this highly available solution.
+<br><br>
 
-### Start SearXNG with systemd
+## Weaknesses + Plans for Version 2
+While the Kubernetes cluster provides high availability for the application there is almost nothing providing high availability for the critical "t3.small" instance that runs the application in addition to the Redis container and the Caddy container. The front end is also rudimentary and lacking memorable engagement beyond the search feature.
 
-You can skip this step if you don't use systemd.
+Version 2 of FindAndSeek will have an Auto-Scaling Group with at least 1 instance per AZ and each AMI will be updated to include Kubernetes pods hosting the Redis and Caddy containers. Each cluster will be set up with its own monitoring and features designed to more closely replicate a production environment.
 
-- ```cp searxng-docker.service.template searxng-docker.service```
-- edit the content of ```WorkingDirectory``` in the ```searxng-docker.service``` file (only if the installation path is different from /usr/local/searxng-docker)
-- Install the systemd unit:
-  ```sh
-  systemctl enable $(pwd)/searxng-docker.service
-  systemctl start searxng-docker.service
-  ```
-### Start SearXNG with crontab
+In terms of customer engagement and the user interface, I am currently enlisting my network to provide input on the UI and UX to improve FindAndSeek V2. If you have suggestions for ways to improve the UI or UX please email  jeramayagramby@gmail.com <br><br>
 
-If using systemd as above does not work, you can use a crontab entry to start this container.
-
-To start the container via crontab:
-1. Ensure the 'start_container_in_crontab.sh' script is executable with the following command:
-   - `sudo chmod u+x start_container_in_crontab.sh`
-2. Open Crontab with the following command: `sudo crontab -e` (edit crontab in sudo mode)
-2. Enter the following snippet (note: edit container path as necessary):
-    - `@reboot ( sudo /home/searxng/searxng-docker/./start_container_in_crontab.sh )&`
-3. Save the changes made. If you have set Vim as your default crontab editor, enter Ctrl+C then `:wq`, and then Enter to save.
-   
-Make sure your container path has the docker-compose.yml file in the same directory.
-
-## Note on the image proxy feature
-
-The SearXNG image proxy is activated by default.
-
-The default [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) allow the browser to access to ```${SEARXNG_HOSTNAME}``` and ```https://*.tile.openstreetmap.org;```.
-
-If some users wants to disable the image proxy, you have to modify [./Caddyfile](https://github.com/rattfieldnz/searxng-docker/blob/master/Caddyfile). Replace the ```img-src 'self' data: https://*.tile.openstreetmap.org;``` by ```img-src * data:;```.
-
-## Multi Architecture Docker images
-
-Supported architecture:
-- amd64
-- arm64
-- arm/v7
-
-## How to update ?
-
-To update the SearXNG stack:
-
-```sh
-docker-compose pull
-docker-compose down
-docker-compose up
-```
-
-To update this `docker-compose.yml` file:
-
-Check out the newest version on github: [rattfieldnz/searxng-docker](https://github.com/rattfieldnz/searxng-docker).
+## Project Photos <br><br>
+![photos](photos/docker.png)<br><br>
+![photos](photos/landingpage.png)<br><br>
+![photos](photos/regularsearch.png)<br><br>
+![photos](photos/maps.png)<br><br>
