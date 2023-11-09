@@ -23,6 +23,6 @@ In terms of customer engagement and the user interface, I am currently enlisting
 
 ## Project Photos <br><br>
 ![photos](searxng-docker/photos/docker.png)<br><br>
-![photos](searxng-docker/landingpage.png)<br><br>
-![photos](searxng-docker/regularsearch.png)<br><br>
+![photos](searxng-docker/photos/landingpage.png)<br><br>
+![photos](searxng-docker/photos/regularsearch.png)<br><br>
 ![photos](searxng-docker/photos/maps.png)<br><br>
